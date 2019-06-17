@@ -1,13 +1,13 @@
 package container
 
 //8KB bits for value 0 ~ 2^16 - 1
-type BitMap struct {
+type BitMapContainer struct {
 	value [4096]uint16
 }
 
 const limit = 4096
 
-func (bitmap *BitMap) exists(v uint16) bool {
+func (bitmap *BitMapContainer) exists(v uint16) bool {
 	if v >= limit {
 		return false
 	}
@@ -18,7 +18,7 @@ func (bitmap *BitMap) exists(v uint16) bool {
 	return (bitmap.value[index] & mask) != 0
 }
 
-func (bitmap *BitMap) add(v uint16) bool {
+func (bitmap *BitMapContainer) add(v uint16) bool {
 	if v >= limit {
 		return false
 	}
@@ -33,7 +33,7 @@ func (bitmap *BitMap) add(v uint16) bool {
 	return ret
 }
 
-func (bitmap *BitMap) remove(v uint16) bool {
+func (bitmap *BitMapContainer) remove(v uint16) bool {
 	if v >= limit {
 		return false
 	}
@@ -48,11 +48,11 @@ func (bitmap *BitMap) remove(v uint16) bool {
 	return ret
 }
 
-func (bitmap *BitMap) convert(target CONTAINTER_TYPE) *Container {
+func (bitmap *BitMapContainer) convert(target CONTAINTER_TYPE) *Container {
 	switch target {
-	case BITMAP:
-	case SORTED_ARRAY:
-	case RUN:
+	case BitmapContainerType:
+	case SortedArrayContainerType:
+	case RunContainerType:
 	}
 	return nil
 }

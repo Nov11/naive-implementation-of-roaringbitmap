@@ -3,9 +3,9 @@ package container
 type CONTAINTER_TYPE int
 
 const (
-	BITMAP       CONTAINTER_TYPE = 1
-	SORTED_ARRAY CONTAINTER_TYPE = 2
-	RUN          CONTAINTER_TYPE = 3
+	BitmapContainerType      CONTAINTER_TYPE = 1
+	SortedArrayContainerType CONTAINTER_TYPE = 2
+	RunContainerType         CONTAINTER_TYPE = 3
 )
 
 type Container interface {
