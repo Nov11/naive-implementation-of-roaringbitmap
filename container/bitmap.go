@@ -1,5 +1,6 @@
 package container
 
+//8KB bits for value 0 ~ 2^16 - 1
 type BitMap struct {
 	value [4096]uint16
 }
@@ -45,4 +46,13 @@ func (bitmap *BitMap) remove(v uint16) bool {
 	bitmap.value[index] &= ^mask
 
 	return ret
+}
+
+func (bitmap *BitMap) convert(target CONTAINTER_TYPE) *Container {
+	switch target {
+	case BITMAP:
+	case SORTED_ARRAY:
+	case RUN:
+	}
+	return nil
 }
