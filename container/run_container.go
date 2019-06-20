@@ -6,19 +6,24 @@ import (
 
 //at most 2047 runs. 2 uint16 per run. first uint16 is start value. second is continuous count - 1
 type RunContainer struct {
-	cnt   uint16
-	value [4095]uint16
+	cnt uint16
+	//value [4095]uint16
+	value []uint16
 }
 
 const runCntLimit = 2047
 
 func (run *RunContainer) exists(v uint16) bool {
-	return alreadyExists(run.existsImp(v))
+	return run.alreadyExists(run.existsImp(v))
 }
 
-func (run *RunContainer) existsImp(v uint16) int32 {
+func (run *RunContainer) alreadyExists(idx uint16) bool {
+	return idx != run.cnt
+}
+
+func (run *RunContainer) existsImp(v uint16) uint16 {
 	if run.cnt == 0 {
-		return -1
+		return run.cnt
 	}
 
 	//2 uint16 serves as one unit
@@ -31,7 +36,7 @@ func (run *RunContainer) existsImp(v uint16) int32 {
 		lower := run.value[mid*2]
 		high := run.value[mid*2] + run.value[mid*2+1]
 		if v >= lower && v <= high {
-			return int32(mid)
+			return mid
 		} else if v < lower {
 			e = mid
 		} else {
@@ -39,12 +44,12 @@ func (run *RunContainer) existsImp(v uint16) int32 {
 		}
 	}
 
-	return -1
+	return e
 }
 
 func (run *RunContainer) add(v uint16) bool {
 	idx := run.existsImp(v)
-	if alreadyExists(idx) {
+	if run.alreadyExists(idx) {
 		return false
 	}
 
@@ -93,7 +98,7 @@ func (run *RunContainer) add(v uint16) bool {
 func (run *RunContainer) remove(v uint16) bool {
 	idx := run.existsImp(v)
 
-	if !alreadyExists(idx) {
+	if !run.alreadyExists(idx) {
 		return false
 	}
 
