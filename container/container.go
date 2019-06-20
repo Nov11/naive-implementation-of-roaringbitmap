@@ -11,6 +11,6 @@ const (
 type Container interface {
 	exists(v uint16) bool
 	add(v uint16) bool
-	remove(v uint16) bool
+	del(v uint16) bool
 	convert(target CONTAINTER_TYPE) *Container
 }
