@@ -8,9 +8,10 @@ import (
 )
 
 func makeSortedArrayContainer() *SortedArrayContainer {
-	ret := new(SortedArrayContainer)
-	ret.value = make([]uint16, 4096)
-	return ret
+	//s := [4096]uint16{}
+	//pointer := unsafe.Pointer(&s[0])
+	//ret := (*SortedArrayContainer)(pointer)
+	return new(SortedArrayContainer)
 }
 
 //add exist get

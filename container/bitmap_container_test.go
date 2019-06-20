@@ -9,7 +9,7 @@ import (
 
 func makeBitMapContainer() *BitMapContainer {
 	ret := new(BitMapContainer)
-	ret.value = make([]uint16, 4096)
+	//ret.value = make([]uint16, 4096)
 	return ret
 }
 

@@ -6,20 +6,20 @@ import (
 
 //8KB at most. elements are uint16 integers
 type SortedArrayContainer struct {
-	cnt uint16
-	//value [4095]uint16
-	value []uint16
+	cnt   uint16
+	value [4095]uint16
+	//value []uint16
 }
 
 const sortedArrayCntLimit = 4096 - 1
 
 func (array *SortedArrayContainer) exists(v uint16) bool {
 	ret := array.existsImp(v)
-	return array.alreadyExists(ret)
+	return array.alreadyExists(ret, v)
 }
 
-func (array *SortedArrayContainer) alreadyExists(idx uint16) bool {
-	return idx != array.cnt
+func (array *SortedArrayContainer) alreadyExists(idx uint16, v uint16) bool {
+	return idx != array.cnt && array.value[idx] == v
 }
 
 func (array *SortedArrayContainer) existsImp(v uint16) uint16 {
@@ -46,7 +46,7 @@ func (array *SortedArrayContainer) existsImp(v uint16) uint16 {
 
 func (array *SortedArrayContainer) add(v uint16) bool {
 	idx := array.existsImp(v)
-	if array.alreadyExists(idx) {
+	if array.alreadyExists(idx, v) {
 		return false
 	}
 
@@ -71,7 +71,7 @@ func (array *SortedArrayContainer) del(v uint16) bool {
 	}
 
 	idx := array.existsImp(v)
-	if !array.alreadyExists(idx) {
+	if !array.alreadyExists(idx, v) {
 		return false
 	}
 

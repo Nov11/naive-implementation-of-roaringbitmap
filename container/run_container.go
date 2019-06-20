@@ -6,19 +6,26 @@ import (
 
 //at most 2047 runs. 2 uint16 per run. first uint16 is start value. second is continuous count - 1
 type RunContainer struct {
-	cnt uint16
-	//value [4095]uint16
-	value []uint16
+	cnt   uint16
+	value [4095]uint16
+	//value []uint16
 }
 
 const runCntLimit = 2047
 
 func (run *RunContainer) exists(v uint16) bool {
-	return run.alreadyExists(run.existsImp(v))
+	return run.alreadyExists(run.existsImp(v), v)
 }
 
-func (run *RunContainer) alreadyExists(idx uint16) bool {
-	return idx != run.cnt
+func (run *RunContainer) alreadyExists(idx uint16, v uint16) bool {
+	if idx >= run.cnt {
+		return false
+	}
+
+	lower := run.value[idx*2]
+	high := run.value[idx*2+1] + lower
+
+	return lower <= v && v <= high
 }
 
 func (run *RunContainer) existsImp(v uint16) uint16 {
@@ -28,7 +35,7 @@ func (run *RunContainer) existsImp(v uint16) uint16 {
 
 	//2 uint16 serves as one unit
 	var b uint16 = 0
-	e := run.cnt / 2
+	e := run.cnt
 
 	for b < e {
 		mid := b + (e-b)/2
@@ -49,12 +56,13 @@ func (run *RunContainer) existsImp(v uint16) uint16 {
 
 func (run *RunContainer) add(v uint16) bool {
 	idx := run.existsImp(v)
-	if run.alreadyExists(idx) {
+	if run.alreadyExists(idx, v) {
 		return false
 	}
 
 	//can be added to previous / next run
 	target := uint16(idx)
+
 	//previous
 	if target > 0 {
 		previous := target - 1
@@ -64,7 +72,9 @@ func (run *RunContainer) add(v uint16) bool {
 			run.value[previous*2+1]++
 			return true
 		}
-	} else {
+	}
+
+	if target < run.cnt {
 		lower := run.value[target*2]
 		high := run.value[target*2+1] + lower
 		if v+1 == lower {
@@ -84,21 +94,21 @@ func (run *RunContainer) add(v uint16) bool {
 		return bitmap.add(v)
 	}
 
-	for i := run.cnt * 2; i > 2*target+1; i-- {
-		run.value[i] = run.value[i-2]
-		run.value[i+1] = run.value[i-2]
+	for i := run.cnt; i > target; i-- {
+		run.value[2*i] = run.value[2*(i-1)]
+		run.value[2*i+1] = run.value[2*(i-1)+1]
 	}
 
 	run.value[target*2] = v
-	run.value[target*2+1] = 1
+	run.value[target*2+1] = 0
 	run.cnt++
 	return true
 }
 
-func (run *RunContainer) remove(v uint16) bool {
+func (run *RunContainer) del(v uint16) bool {
 	idx := run.existsImp(v)
 
-	if !run.alreadyExists(idx) {
+	if !run.alreadyExists(idx, v) {
 		return false
 	}
 
@@ -111,25 +121,26 @@ func (run *RunContainer) doRemove(idx uint16, v uint16) bool {
 	lower := run.value[idx*2]
 	high := run.value[idx*2+1] + lower
 
-	edge := false
 	size := high - lower + 1
 	if lower == v || high == v {
 		if lower == v {
 			run.value[idx*2]++
 		}
-		edge = true
+
 		size--
 		if size > 0 {
 			run.value[idx*2+1]--
 		}
 
 		//if run length == 0, remove this run
-		if edge && size == 0 {
+		if size == 0 {
 			for i := idx; i+1 < run.cnt; i++ {
-				run.value[idx*2] = run.value[idx*2+2]
-				run.value[idx*2+1] = run.value[idx*2+3]
+				run.value[idx*2] = run.value[(idx+1)*2]
+				run.value[idx*2+1] = run.value[(idx+1)*2+1]
 			}
 			run.cnt--
+			run.value[run.cnt*2] = 0
+			run.value[run.cnt*2+1] = 0
 		}
 		return true
 	}

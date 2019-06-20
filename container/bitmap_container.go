@@ -2,8 +2,8 @@ package container
 
 //8KB bits for value 0 ~ 2^16 - 1
 type BitMapContainer struct {
-	//value [4096]uint16
-	value []uint16
+	value [4096]uint16
+	//value []uint16
 }
 
 func (bitmap *BitMapContainer) exists(v uint16) bool {
