@@ -85,7 +85,7 @@ func (array *SortedArrayContainer) del(v uint16) bool {
 	return true
 }
 
-func (array *SortedArrayContainer) convert(target CONTAINTER_TYPE) *Container {
+func (array *SortedArrayContainer) convert(target TypeContainer) *Container {
 	switch target {
 	case BitmapContainerType:
 	case SortedArrayContainerType:

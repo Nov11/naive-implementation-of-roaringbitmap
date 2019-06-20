@@ -163,7 +163,7 @@ func (run *RunContainer) doRemove(idx uint16, v uint16) bool {
 	return true
 }
 
-func (run *RunContainer) convert(target CONTAINTER_TYPE) *Container {
+func (run *RunContainer) convert(target TypeContainer) *Container {
 	switch target {
 	case BitmapContainerType:
 	case SortedArrayContainerType:

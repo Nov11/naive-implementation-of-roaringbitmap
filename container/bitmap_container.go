@@ -35,7 +35,7 @@ func (bitmap *BitMapContainer) del(v uint16) bool {
 	return ret
 }
 
-func (bitmap *BitMapContainer) convert(target CONTAINTER_TYPE) *Container {
+func (bitmap *BitMapContainer) convert(target TypeContainer) *Container {
 	switch target {
 	case BitmapContainerType:
 	case SortedArrayContainerType:
