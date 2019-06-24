@@ -55,13 +55,14 @@ func TestDelBit_BitMap(t *testing.T) {
 }
 
 func TestFromBinary_BitMap(t *testing.T) {
-	tmp := [8196]byte{}
+	tmp := [8192]byte{}
 
-	for i := 0; i < 8196; i++ {
+	for i := 0; i < 8192; i++ {
 		tmp[i] = byte(i % 256)
 	}
 
-	bitmap := fromBinaryArray(tmp[:])
+	bitmap, err := FromBinaryArray(tmp[:])
+	assert.NoError(t, err, "should not raise error")
 
 	for i := 0; i < 4096; i++ {
 		expect0 := tmp[i*2]
@@ -69,4 +70,29 @@ func TestFromBinary_BitMap(t *testing.T) {
 		assert.Equal(t, expect1, byte(bitmap.Value[i]>>8))
 		assert.Equal(t, expect0, byte(bitmap.Value[i]))
 	}
+}
+
+func TestFromBinary2_BitMap(t *testing.T) {
+	tmp := make([]byte, 8192)
+
+	for i := 0; i < 8192; i++ {
+		tmp[i] = byte(i % 256)
+	}
+
+	bitmap, err := FromBinaryArray(tmp[:])
+	assert.NoError(t, err, "should not raise error")
+
+	for i := 0; i < 4096; i++ {
+		expect0 := tmp[i*2]
+		expect1 := tmp[i*2+1]
+		assert.Equal(t, expect1, byte(bitmap.Value[i]>>8))
+		assert.Equal(t, expect0, byte(bitmap.Value[i]))
+	}
+}
+
+func TestToBinary_BitMap(t *testing.T) {
+	bitmap := MakeBitMapContainer()
+
+	ret := bitmap.ToBinaryArray()
+	assert.Equal(t, 8192, len(ret))
 }
