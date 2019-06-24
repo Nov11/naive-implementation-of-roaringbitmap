@@ -4,16 +4,16 @@ import (
 	"unsafe"
 )
 
-//at most 2047 runs. 2 uint16 per run. first uint16 is start value. second is continuous count - 1
+//at most 2047 runs. 2 uint16 per run. first uint16 is start Value. second is continuous count - 1
 type RunContainer struct {
 	cnt   uint16
 	value [4095]uint16
-	//value []uint16
+	//Value []uint16
 }
 
 const runCntLimit = 2047
 
-func (run *RunContainer) exists(v uint16) bool {
+func (run *RunContainer) Exists(v uint16) bool {
 	return run.alreadyExists(run.existsImp(v), v)
 }
 
@@ -54,7 +54,7 @@ func (run *RunContainer) existsImp(v uint16) uint16 {
 	return e
 }
 
-func (run *RunContainer) add(v uint16) bool {
+func (run *RunContainer) Add(v uint16) bool {
 	idx := run.existsImp(v)
 	if run.alreadyExists(idx, v) {
 		return false
@@ -91,7 +91,7 @@ func (run *RunContainer) add(v uint16) bool {
 
 	if run.cnt+1 > runCntLimit {
 		bitmap := (*BitMapContainer)(unsafe.Pointer(run.convert(BitmapContainerType)))
-		return bitmap.add(v)
+		return bitmap.Add(v)
 	}
 
 	for i := run.cnt; i > target; i-- {
@@ -105,7 +105,7 @@ func (run *RunContainer) add(v uint16) bool {
 	return true
 }
 
-func (run *RunContainer) del(v uint16) bool {
+func (run *RunContainer) Del(v uint16) bool {
 	idx := run.existsImp(v)
 
 	if !run.alreadyExists(idx, v) {
@@ -153,7 +153,7 @@ func (run *RunContainer) doRemove(idx uint16, v uint16) bool {
 		run.value[i*2+1] = run.value[(i-1)*2+1]
 	}
 
-	//adjust value[idx]
+	//adjust Value[idx]
 	run.value[idx*2+1] = v - 1 - lower
 
 	run.value[(idx+1)*2] = v + 1

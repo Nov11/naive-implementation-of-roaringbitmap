@@ -8,12 +8,12 @@ import (
 type SortedArrayContainer struct {
 	cnt   uint16
 	value [4095]uint16
-	//value []uint16
+	//Value []uint16
 }
 
 const sortedArrayCntLimit = 4096 - 1
 
-func (array *SortedArrayContainer) exists(v uint16) bool {
+func (array *SortedArrayContainer) Exists(v uint16) bool {
 	ret := array.existsImp(v)
 	return array.alreadyExists(ret, v)
 }
@@ -44,7 +44,7 @@ func (array *SortedArrayContainer) existsImp(v uint16) uint16 {
 	return e
 }
 
-func (array *SortedArrayContainer) add(v uint16) bool {
+func (array *SortedArrayContainer) Add(v uint16) bool {
 	idx := array.existsImp(v)
 	if array.alreadyExists(idx, v) {
 		return false
@@ -52,7 +52,7 @@ func (array *SortedArrayContainer) add(v uint16) bool {
 
 	if array.cnt+1 > sortedArrayCntLimit {
 		bitmap := (*BitMapContainer)(unsafe.Pointer(array.convert(BitmapContainerType)))
-		return bitmap.add(v)
+		return bitmap.Add(v)
 	}
 
 	target := uint16(idx)
@@ -65,7 +65,7 @@ func (array *SortedArrayContainer) add(v uint16) bool {
 	return true
 }
 
-func (array *SortedArrayContainer) del(v uint16) bool {
+func (array *SortedArrayContainer) Del(v uint16) bool {
 	if array.cnt == 0 {
 		return false
 	}

@@ -14,17 +14,17 @@ func makeSortedArrayContainer() *SortedArrayContainer {
 	return new(SortedArrayContainer)
 }
 
-//add exist get
+//Add exist get
 func TestAdd_SortedArray(t *testing.T) {
 	sortedArray := makeSortedArrayContainer()
 
 	var value uint64 = 1
 	for value <= math.MaxUint32 {
 		v := uint16(value)
-		assert.Equal(t, true, sortedArray.add(v))
+		assert.Equal(t, true, sortedArray.Add(v))
 		assert.Equal(t, uint16(1), sortedArray.cnt)
-		assert.Equal(t, true, sortedArray.exists(v))
-		assert.Equal(t, true, sortedArray.del(v))
+		assert.Equal(t, true, sortedArray.Exists(v))
+		assert.Equal(t, true, sortedArray.Del(v))
 		assert.Equal(t, uint16(0), sortedArray.cnt)
 		value <<= 1
 	}
@@ -33,7 +33,7 @@ func TestAdd_SortedArray(t *testing.T) {
 func TestAddBit_SortedArray(t *testing.T) {
 	sortedArray := makeSortedArrayContainer()
 
-	sortedArray.add(18)
+	sortedArray.Add(18)
 	assert.Equal(t, uint16(0x01), sortedArray.cnt)
 	for i := 0; i < len(sortedArray.value); i++ {
 		binary := sortedArray.value[i]
@@ -48,8 +48,8 @@ func TestAddBit_SortedArray(t *testing.T) {
 func TestDelBit_SortedArray(t *testing.T) {
 	sortedArray := makeSortedArrayContainer()
 
-	sortedArray.add(18)
-	sortedArray.del(18)
+	sortedArray.Add(18)
+	sortedArray.Del(18)
 	assert.Equal(t, uint16(0), sortedArray.cnt)
 
 	for i := 0; i < len(sortedArray.value); i++ {
@@ -57,11 +57,11 @@ func TestDelBit_SortedArray(t *testing.T) {
 		assert.Equal(t, 0, util.BitCount(binary))
 	}
 
-	sortedArray.del(777)
+	sortedArray.Del(777)
 	for i := 0; i < len(sortedArray.value); i++ {
 		binary := sortedArray.value[i]
 		assert.Equal(t, 0, util.BitCount(binary))
 	}
 }
 
-//todo: add elements to 4096 and test container conversion
+//todo: Add elements to 4096 and test container conversion

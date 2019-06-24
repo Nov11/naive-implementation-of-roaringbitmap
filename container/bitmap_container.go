@@ -1,36 +1,36 @@
 package container
 
-//8KB bits for value 0 ~ 2^16 - 1
+//8KB bits for Value 0 ~ 2^16 - 1
 type BitMapContainer struct {
-	value [4096]uint16
-	//value []uint16
+	Value *[4096]uint16
+	//Value []uint16
 }
 
-func (bitmap *BitMapContainer) exists(v uint16) bool {
+func (bitmap *BitMapContainer) Exists(v uint16) bool {
 	index := v / 16
 	var mask uint16 = 1 << (v % 16)
 
-	return (bitmap.value[index] & mask) != 0
+	return (bitmap.Value[index] & mask) != 0
 }
 
-func (bitmap *BitMapContainer) add(v uint16) bool {
+func (bitmap *BitMapContainer) Add(v uint16) bool {
 	index := v / 16
 	var mask uint16 = 1 << (v % 16)
 
-	ret := (bitmap.value[index] & mask) == 0
+	ret := (bitmap.Value[index] & mask) == 0
 
-	bitmap.value[index] |= mask
+	bitmap.Value[index] |= mask
 
 	return ret
 }
 
-func (bitmap *BitMapContainer) del(v uint16) bool {
+func (bitmap *BitMapContainer) Del(v uint16) bool {
 	index := v / 16
 	var mask uint16 = 1 << (v % 16)
 
-	ret := (bitmap.value[index] & mask) != 0
+	ret := (bitmap.Value[index] & mask) != 0
 
-	bitmap.value[index] &= ^mask
+	bitmap.Value[index] &= ^mask
 
 	return ret
 }
