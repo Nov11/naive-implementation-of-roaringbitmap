@@ -1,3 +1,3 @@
 module github.com/Nov11/naive-implementation-of-roaringbitmap
 
-require github.com/stretchr/testify v1.3.0
+require github.com/stretchr/testify v1.2.2
