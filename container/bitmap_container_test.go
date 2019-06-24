@@ -7,16 +7,9 @@ import (
 	"testing"
 )
 
-func makeBitMapContainer() *BitMapContainer {
-	ret := new(BitMapContainer)
-	tmp := [4096]uint16{}
-	ret.Value = &(tmp)
-	return ret
-}
-
 //Add exist get
 func TestAdd_BitMap(t *testing.T) {
-	bitmap := makeBitMapContainer()
+	bitmap := MakeBitMapContainer()
 
 	var value uint64 = 1
 	for value <= math.MaxUint32 {
@@ -29,7 +22,7 @@ func TestAdd_BitMap(t *testing.T) {
 }
 
 func TestAddBit_BitMap(t *testing.T) {
-	bitmap := makeBitMapContainer()
+	bitmap := MakeBitMapContainer()
 
 	bitmap.Add(18)
 
@@ -44,7 +37,7 @@ func TestAddBit_BitMap(t *testing.T) {
 }
 
 func TestDelBit_BitMap(t *testing.T) {
-	bitmap := makeBitMapContainer()
+	bitmap := MakeBitMapContainer()
 
 	bitmap.Add(18)
 	bitmap.Del(18)

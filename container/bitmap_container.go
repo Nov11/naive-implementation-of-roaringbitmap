@@ -6,6 +6,12 @@ type BitMapContainer struct {
 	//Value []uint16
 }
 
+func MakeBitMapContainer() *BitMapContainer {
+	ret := new(BitMapContainer)
+	ret.Value = &[4096]uint16{}
+	return ret
+}
+
 func (bitmap *BitMapContainer) Exists(v uint16) bool {
 	index := v / 16
 	var mask uint16 = 1 << (v % 16)
