@@ -53,3 +53,20 @@ func TestDelBit_BitMap(t *testing.T) {
 		assert.Equal(t, 0, util.BitCount(binary))
 	}
 }
+
+func TestFromBinary_BitMap(t *testing.T) {
+	tmp := [8196]byte{}
+
+	for i := 0; i < 8196; i++ {
+		tmp[i] = byte(i % 256)
+	}
+
+	bitmap := fromBinaryArray(tmp[:])
+
+	for i := 0; i < 4096; i++ {
+		expect0 := tmp[i*2]
+		expect1 := tmp[i*2+1]
+		assert.Equal(t, expect1, byte(bitmap.Value[i]>>8))
+		assert.Equal(t, expect0, byte(bitmap.Value[i]))
+	}
+}

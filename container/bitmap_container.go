@@ -1,14 +1,21 @@
 package container
 
+import "unsafe"
+
 //8KB bits for Value 0 ~ 2^16 - 1
 type BitMapContainer struct {
 	Value *[4096]uint16
-	//Value []uint16
 }
 
 func MakeBitMapContainer() *BitMapContainer {
 	ret := new(BitMapContainer)
 	ret.Value = &[4096]uint16{}
+	return ret
+}
+
+func fromBinaryArray(input []byte) *BitMapContainer {
+	ret := new(BitMapContainer)
+	ret.Value = (*[4096]uint16)(unsafe.Pointer(&input[0]))
 	return ret
 }
 
