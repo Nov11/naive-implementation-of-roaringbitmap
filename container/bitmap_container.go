@@ -2,6 +2,7 @@ package container
 
 import (
 	"errors"
+	"github.com/Nov11/naive-implementation-of-roaringbitmap/util"
 	"unsafe"
 )
 
@@ -67,4 +68,22 @@ func (bitmap *BitMapContainer) convert(target TypeContainer) *Container {
 	case RunContainerType:
 	}
 	return nil
+}
+
+func (bitmap *BitMapContainer) countRuns() uint16 {
+	var ret uint16 = 0
+
+	var w uint16 = 0
+	var n uint16 = 0
+
+	for i := 0; i+1 < len(bitmap.Value); i++ {
+		w = bitmap.Value[i]
+		n = bitmap.Value[i+1]
+		ret += uint16(util.BitCount((w<<1)&^w)) + uint16(w>>15&^n)
+	}
+
+	w = n
+	ret += uint16(util.BitCount((w<<1)&^w)) + uint16(w>>15)
+
+	return ret
 }

@@ -96,3 +96,12 @@ func TestToBinary_BitMap(t *testing.T) {
 	ret := bitmap.ToBinaryArray()
 	assert.Equal(t, 8192, len(ret))
 }
+
+func TestCountRun_Bitmap(t *testing.T) {
+	bitmap := MakeBitMapContainer()
+
+	bitmap.Value[0] = 0x8000
+	bitmap.Value[1] = 0x0001
+
+	assert.Equal(t, uint16(1), bitmap.countRuns())
+}
